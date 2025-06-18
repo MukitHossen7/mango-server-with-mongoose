@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import Mango from "./mango.model";
 
-export const createMango = async (req: Request, res: Response) => {
+const createMango = async (req: Request, res: Response) => {
   try {
     const payload = req.body;
     const mango = new Mango(payload);
@@ -17,4 +17,8 @@ export const createMango = async (req: Request, res: Response) => {
       error,
     });
   }
+};
+
+export const mangoController = {
+  createMango,
 };

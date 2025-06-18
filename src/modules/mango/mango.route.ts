@@ -1,8 +1,8 @@
 import express from "express";
-import { createMango } from "./mango.controller";
+import { mangoController } from "./mango.controller";
 
 const mangoRoute = express.Router();
 
-mangoRoute.post("/", createMango);
+mangoRoute.post("/", mangoController.createMango);
 
 export default mangoRoute;

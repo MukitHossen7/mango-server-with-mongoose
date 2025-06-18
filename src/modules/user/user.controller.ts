@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import User from "./user.model";
 
-export const createUser = async (req: Request, res: Response) => {
+const createUser = async (req: Request, res: Response) => {
   try {
     const payload = req.body;
     const user = new User(payload);
@@ -18,7 +18,7 @@ export const createUser = async (req: Request, res: Response) => {
   }
 };
 
-export const getUsers = async (req: Request, res: Response) => {
+const getUsers = async (req: Request, res: Response) => {
   try {
     const users = await User.find();
     res.status(201).json({
@@ -32,4 +32,9 @@ export const getUsers = async (req: Request, res: Response) => {
       error,
     });
   }
+};
+
+export const userController = {
+  createUser,
+  getUsers,
 };
