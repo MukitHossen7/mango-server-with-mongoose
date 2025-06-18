@@ -2,12 +2,16 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import config from "./config";
 import mongoose from "mongoose";
+import userRoute from "./modules/user/user.route";
 
 const app = express();
 
 //middleware
 app.use(cors());
 app.use(express.json());
+
+//routes
+app.use("/user", userRoute);
 
 app.get("/", (req: Request, res: Response) => {
   res.send({
