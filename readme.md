@@ -1,13 +1,13 @@
 <!-- mango server -->
 
-<!-- user -->
+### user
 
 name, email, phone, password, role,
 
-<!-- mango -->
+### mango
 
 name, image, variety, price, stock, origin, season
 
-<!-- order -->
+### order
 
 userId, mangoId, quantity, totalPrice, status
