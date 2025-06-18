@@ -30,11 +30,14 @@ const userSchema = new Schema<IUser>(
     password: {
       type: String,
       required: true,
-      minlength: 6,
+      minlength: [6, "Password must be at least 6 characters long"],
     },
     role: {
       type: String,
-      enum: ["admin", "customer"],
+      enum: {
+        values: ["admin", "customer"],
+        message: "{VALUE} is not a valid role",
+      },
       default: "customer",
     },
   },
