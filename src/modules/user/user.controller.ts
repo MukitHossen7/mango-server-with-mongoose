@@ -16,3 +16,19 @@ export const createUser = async (req: Request, res: Response) => {
     console.error("Error creating user:", error);
   }
 };
+
+export const getUsers = async (req: Request, res: Response) => {
+  try {
+    const users = await User.find();
+    res.status(201).json({
+      success: true,
+      message: "Users retrieved successfully",
+      users,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to retrieve users",
+      error,
+    });
+  }
+};
