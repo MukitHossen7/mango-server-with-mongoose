@@ -7,6 +7,8 @@ const userSchema = new Schema<IUser>(
       type: String,
       required: true,
       trim: true,
+      minlength: 5,
+      maxlength: 20,
     },
     email: {
       type: String,
@@ -14,6 +16,12 @@ const userSchema = new Schema<IUser>(
       unique: true,
       trim: true,
       lowercase: true,
+      validate: {
+        validator: function (input: string) {
+          return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(input);
+        },
+        message: (props) => `${props.value} is not a valid email address!`,
+      },
     },
     phone: {
       type: String,

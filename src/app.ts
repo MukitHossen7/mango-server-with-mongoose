@@ -5,8 +5,7 @@ import userRoute from "./modules/user/user.route";
 export const app = express();
 
 //middleware
-app.use(cors());
-app.use(express.json());
+app.use([cors(), express.urlencoded({ extended: true }), express.json()]);
 
 //routes
 app.use("/user", userRoute);
