@@ -19,6 +19,23 @@ const createMango = async (req: Request, res: Response) => {
   }
 };
 
+const getMangos = async (req: Request, res: Response) => {
+  try {
+    const mangos = await Mango.find();
+    res.status(201).json({
+      status: "success",
+      message: "Mangos retrieved successfully",
+      data: mangos,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to retrieve users",
+      error,
+    });
+  }
+};
+
 export const mangoController = {
   createMango,
+  getMangos,
 };
