@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import cors from "cors";
 import config from "./config";
 import mongoose from "mongoose";
@@ -8,6 +8,13 @@ const app = express();
 //middleware
 app.use(cors());
 app.use(express.json());
+
+app.get("/", (req: Request, res: Response) => {
+  res.send({
+    success: true,
+    message: "This is out mongo server",
+  });
+});
 
 //server
 const server = async () => {
