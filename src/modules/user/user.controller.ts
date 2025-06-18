@@ -5,6 +5,7 @@ export const createUser = async (req: Request, res: Response) => {
   try {
     const payload = req.body;
     const user = new User(payload);
+    await User.syncIndexes();
     const data = await user.save();
     res.status(201).json({
       success: true,
