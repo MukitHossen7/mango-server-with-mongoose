@@ -1,4 +1,4 @@
-import { Types } from "mongoose";
+import { Model, Types } from "mongoose";
 
 export interface IAddress {
   zipcode: string;
@@ -13,4 +13,8 @@ export interface IOrder {
   totalPrice: number;
   status: "pending" | "process" | "complete";
   address: IAddress;
+}
+
+export interface OrderMethods extends Model<IOrder> {
+  checkStock(id: string, quantity: number): boolean;
 }

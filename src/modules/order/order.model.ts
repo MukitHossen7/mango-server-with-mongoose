@@ -1,5 +1,5 @@
 import { model, Schema } from "mongoose";
-import { IAddress, IOrder } from "./order.interface";
+import { IAddress, IOrder, OrderMethods } from "./order.interface";
 import Mango from "../mango/mango.model";
 
 const addressSchema = new Schema<IAddress>(
@@ -24,7 +24,7 @@ const addressSchema = new Schema<IAddress>(
   { _id: false }
 );
 
-const orderSchema = new Schema<IOrder>(
+const orderSchema = new Schema<IOrder, OrderMethods>(
   {
     user: {
       type: Schema.Types.ObjectId,
@@ -69,5 +69,12 @@ orderSchema.pre("save", async function () {
   this.totalPrice = mango.price * this.quantity;
 });
 
-const Order = model<IOrder>("Order", orderSchema);
+orderSchema.static("checkStock", async function stockCheck(id, quantity) {
+  const mangoStock = await Mango.findById(id);
+  if (mangoStock?.stock) {
+    const result = mangoStock?.stock >= quantity;
+    return result;
+  }
+});
+const Order = model<IOrder, OrderMethods>("Order", orderSchema);
 export default Order;
