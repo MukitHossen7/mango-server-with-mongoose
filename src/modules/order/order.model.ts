@@ -1,5 +1,6 @@
 import { model, Schema } from "mongoose";
 import { IAddress, IOrder } from "./order.interface";
+import Mango from "../mango/mango.model";
 
 const addressSchema = new Schema<IAddress>(
   {
@@ -37,12 +38,10 @@ const orderSchema = new Schema<IOrder>(
     },
     quantity: {
       type: Number,
-      required: true,
       min: 0,
     },
     totalPrice: {
       type: Number,
-      required: true,
       min: 0,
     },
     status: {
@@ -63,6 +62,12 @@ const orderSchema = new Schema<IOrder>(
     timestamps: true,
   }
 );
+
+orderSchema.pre("save", async function () {
+  const mango = await Mango.findById(this.mango);
+  if (!mango) throw new Error("Mango not find");
+  this.totalPrice = mango.price * this.quantity;
+});
 
 const Order = model<IOrder>("Order", orderSchema);
 export default Order;
