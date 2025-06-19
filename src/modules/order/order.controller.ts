@@ -17,7 +17,23 @@ const createOrder = async (req: Request, res: Response) => {
     });
   }
 };
+const getOrders = async (req: Request, res: Response) => {
+  try {
+    const orders = await Order.find();
+    res.status(201).json({
+      success: true,
+      message: "Order retrieved successfully",
+      data: orders,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to retrieved orders",
+      error,
+    });
+  }
+};
 
 export const orderController = {
   createOrder,
+  getOrders,
 };
