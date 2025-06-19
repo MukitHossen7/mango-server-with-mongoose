@@ -1,6 +1,6 @@
 import { Types } from "mongoose";
 
-interface IAddress {
+export interface IAddress {
   zipcode: string;
   state: string;
   country: string;
