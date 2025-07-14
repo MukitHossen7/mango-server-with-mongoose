@@ -2,32 +2,30 @@ import { Request, Response } from "express";
 import Mango from "./mango.model";
 import { mangoServices } from "./mango.service";
 import { catchAsync } from "../../utils/catchAsync";
+import httpStatus from "http-status-codes";
+import { sendResponse } from "../../utils/sendResponse";
 
 const createMango = catchAsync(async (req: Request, res: Response) => {
   const payload = req.body;
   const savedMango = await mangoServices.createMangoIntoDB(payload);
-  res.status(201).json({
-    status: "success",
-    message: "Mango created successfully",
+
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: "Mango Create Successfully",
     data: savedMango,
   });
 });
 
-const getMangos = async (req: Request, res: Response) => {
-  try {
-    const mangos = await mangoServices.getMangosFromDB();
-    res.status(201).json({
-      status: "success",
-      message: "Mangos retrieved successfully",
-      data: mangos,
-    });
-  } catch (error) {
-    res.status(500).json({
-      message: "Failed to retrieve mango",
-      error,
-    });
-  }
-};
+const getMangos = catchAsync(async (req: Request, res: Response) => {
+  const mangos = await mangoServices.getMangosFromDB();
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Mango Retrieved Successfully",
+    data: mangos,
+  });
+});
 
 const getMangoById = async (req: Request, res: Response) => {
   try {
