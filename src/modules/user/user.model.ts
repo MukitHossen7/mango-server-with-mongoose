@@ -1,5 +1,5 @@
 import { model, Schema } from "mongoose";
-import { IUser } from "./user.interface";
+import { IUser, Role } from "./user.interface";
 
 const userSchema = new Schema<IUser>(
   {
@@ -25,7 +25,6 @@ const userSchema = new Schema<IUser>(
     },
     phone: {
       type: String,
-      required: true,
       unique: true,
       trim: true,
     },
@@ -37,10 +36,10 @@ const userSchema = new Schema<IUser>(
     role: {
       type: String,
       enum: {
-        values: ["admin", "customer"],
+        values: Object.values(Role),
         message: "{VALUE} is not a valid role",
       },
-      default: "customer",
+      default: Role.CUSTOMER,
     },
   },
   {
