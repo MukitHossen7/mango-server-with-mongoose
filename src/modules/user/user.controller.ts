@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
 import User from "./user.model";
-import { userService } from "./user.service";
+import { userServices } from "./user.service";
 import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
 import httpStatus from "http-status-codes";
 
 const createUser = catchAsync(async (req: Request, res: Response) => {
   const payload = req.body;
-  const user = await userService.createUserIntoDB(payload);
+  const user = await userServices.createUserIntoDB(payload);
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
@@ -17,23 +17,30 @@ const createUser = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const getUsers = async (req: Request, res: Response) => {
-  try {
-    const users = await User.find();
-    res.status(201).json({
-      success: true,
-      message: "Users retrieved successfully",
-      users,
-    });
-  } catch (error) {
-    res.status(500).json({
-      message: "Failed to retrieve users",
-      error,
-    });
-  }
-};
+const logInUser = catchAsync(async (req: Request, res: Response) => {
+  const payload = req.body;
+  const user = await userServices.logInUser(payload);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "User LogIn successfully",
+    data: user,
+  });
+});
+
+const getUsers = catchAsync(async (req: Request, res: Response) => {
+  const users = await userServices.getUsersFromDB();
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Users retrieved successfully",
+    data: users,
+  });
+});
 
 export const userController = {
   createUser,
   getUsers,
+  logInUser,
 };

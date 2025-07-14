@@ -1,7 +1,9 @@
 import config from "../../config";
+import AppError from "../../error/AppError";
 import { IUser } from "./user.interface";
 import User from "./user.model";
 import bcrypt from "bcryptjs";
+import httpStatus from "http-status-codes";
 
 const createUserIntoDB = async (payload: IUser) => {
   // Hash the password before saving
@@ -16,6 +18,31 @@ const createUserIntoDB = async (payload: IUser) => {
   return data;
 };
 
-export const userService = {
+const getUsersFromDB = async () => {
+  const users = await User.find();
+  return users;
+};
+
+const logInUser = async (payload: Partial<IUser>) => {
+  const { email, password } = payload;
+  const isUserExist = await User.findOne({ email });
+  if (!isUserExist) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found");
+  }
+  const isPasswordMatch = await bcrypt.compare(
+    password as string,
+    isUserExist.password
+  );
+  if (!isPasswordMatch) {
+    throw new AppError(httpStatus.UNAUTHORIZED, "Invalid password");
+  }
+  const { password: pass, ...userData } = isUserExist.toObject();
+
+  return userData;
+};
+
+export const userServices = {
   createUserIntoDB,
+  getUsersFromDB,
+  logInUser,
 };
