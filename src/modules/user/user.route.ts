@@ -1,7 +1,9 @@
 import express from "express";
 import { userController } from "./user.controller";
 import { zodValidateRequest } from "../../middlewares/zodValidateRequest";
-import { createUserZodSchema, userLogInZodSchema } from "./user.zod.validation";
+import { createUserZodSchema } from "./user.zod.validation";
+import { Role } from "./user.interface";
+import { checkAuth } from "../../middlewares/checkAuth";
 
 const userRoute = express.Router();
 
@@ -11,6 +13,6 @@ userRoute.post(
   userController.createUser
 );
 userRoute.post("/login", userController.logInUser);
-userRoute.get("/", userController.getUsers);
+userRoute.get("/", checkAuth(Role.ADMIN), userController.getUsers);
 
 export default userRoute;
