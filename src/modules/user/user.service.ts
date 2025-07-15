@@ -1,5 +1,6 @@
 import config from "../../config";
 import AppError from "../../error/AppError";
+import { createUserToken } from "../../utils/userToken";
 import { IUser } from "./user.interface";
 import User from "./user.model";
 import bcrypt from "bcryptjs";
@@ -36,9 +37,14 @@ const logInUser = async (payload: Partial<IUser>) => {
   if (!isPasswordMatch) {
     throw new AppError(httpStatus.UNAUTHORIZED, "Invalid password");
   }
+
+  const userToken = createUserToken(isUserExist);
   const { password: pass, ...userData } = isUserExist.toObject();
 
-  return userData;
+  return {
+    accessToken: userToken.accessToken,
+    userData,
+  };
 };
 
 export const userServices = {
