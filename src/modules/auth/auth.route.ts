@@ -12,4 +12,6 @@ authRoute.post(
 );
 authRoute.post("/reset-password", authController.resetPassword);
 
+authRoute.post("/refresh-token", authController.createNewAccessToken);
+
 export default authRoute;

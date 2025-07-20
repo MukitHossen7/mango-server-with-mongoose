@@ -43,6 +43,7 @@ const logInUser = async (payload: Partial<IUser>) => {
 
   return {
     accessToken: userToken.accessToken,
+    refreshToken: userToken.refreshToken,
     userData,
   };
 };

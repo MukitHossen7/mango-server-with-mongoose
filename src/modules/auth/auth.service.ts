@@ -3,6 +3,7 @@ import User from "../user/user.model";
 import httpStatus from "http-status-codes";
 import bcrypt from "bcryptjs";
 import config from "../../config";
+import { createNewAccessTokenWithRefreshToken } from "../../utils/userToken";
 
 const changePasswordFromDB = async (
   oldPassword: string,
@@ -47,7 +48,16 @@ const resetPasswordFromDB = async (
   isUserExist.save();
 };
 
+const createNewAccessToken = async (refreshToken: string) => {
+  const newAccessToken = await createNewAccessTokenWithRefreshToken(
+    refreshToken
+  );
+  return {
+    accessToken: newAccessToken.accessToken,
+  };
+};
 export const authServices = {
   changePasswordFromDB,
   resetPasswordFromDB,
+  createNewAccessToken,
 };

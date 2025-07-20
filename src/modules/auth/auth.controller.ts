@@ -4,6 +4,7 @@ import { authServices } from "./auth.service";
 import { sendResponse } from "../../utils/sendResponse";
 import httpStatus from "http-status-codes";
 import AppError from "../../error/AppError";
+import { setAuthCookie } from "../../utils/setCookie";
 
 //change Password
 const changePassword = catchAsync(async (req: Request, res: Response) => {
@@ -34,7 +35,23 @@ const resetPassword = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+// create new access token
+const createNewAccessToken = catchAsync(async (req: Request, res: Response) => {
+  const refreshToken = req.cookies.refreshToken;
+  if (!refreshToken) {
+    throw new AppError(httpStatus.UNAUTHORIZED, "Refresh token is missing");
+  }
+  const tokenInfo = await authServices.createNewAccessToken(refreshToken);
+  setAuthCookie(res, tokenInfo);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "New Access Token Retrieved Successfully",
+    data: tokenInfo,
+  });
+});
 export const authController = {
   changePassword,
   resetPassword,
+  createNewAccessToken,
 };
