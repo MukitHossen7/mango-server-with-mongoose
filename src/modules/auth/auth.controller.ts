@@ -11,17 +11,13 @@ const changePassword = catchAsync(async (req: Request, res: Response) => {
   if (!email) {
     throw new AppError(httpStatus.UNAUTHORIZED, "Invalid token");
   }
-  const userRes = await authServices.changePasswordFromDB(
-    oldPassword,
-    newPassword,
-    email
-  );
+  await authServices.changePasswordFromDB(oldPassword, newPassword, email);
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
     success: true,
     message: "Change Password successfully",
-    data: userRes,
+    data: null,
   });
 });
 
