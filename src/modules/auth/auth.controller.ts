@@ -5,6 +5,7 @@ import { sendResponse } from "../../utils/sendResponse";
 import httpStatus from "http-status-codes";
 import AppError from "../../error/AppError";
 
+//change Password
 const changePassword = catchAsync(async (req: Request, res: Response) => {
   const { oldPassword, newPassword } = req.body;
   const email = req.user.email;
@@ -21,6 +22,19 @@ const changePassword = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+//Reset password
+const resetPassword = catchAsync(async (req: Request, res: Response) => {
+  const { password, phone, email } = req.body;
+  await authServices.resetPasswordFromDB(password, phone, email);
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: "Reset Password successfully",
+    data: null,
+  });
+});
+
 export const authController = {
   changePassword,
+  resetPassword,
 };

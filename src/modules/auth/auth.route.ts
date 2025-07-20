@@ -10,5 +10,6 @@ authRoute.post(
   checkAuth(...Object.values(Role)),
   authController.changePassword
 );
+authRoute.post("/reset-password", authController.resetPassword);
 
 export default authRoute;

@@ -24,6 +24,30 @@ const changePasswordFromDB = async (
   isUserExist.save();
 };
 
+//Reset password
+const resetPasswordFromDB = async (
+  password: string,
+  phone: string,
+  email: string
+) => {
+  const isUserExist = await User.findOne({ email });
+  if (!isUserExist) {
+    throw new AppError(httpStatus.NOT_FOUND, "User not found");
+  }
+
+  const checkPhone = isUserExist.phone === phone;
+  if (!checkPhone) {
+    throw new AppError(httpStatus.BAD_REQUEST, "Phone number is incorrect");
+  }
+
+  isUserExist.password = await bcrypt.hash(
+    password,
+    Number(config.BCRYPT_SALT_ROUNDS)
+  );
+  isUserExist.save();
+};
+
 export const authServices = {
   changePasswordFromDB,
+  resetPasswordFromDB,
 };
