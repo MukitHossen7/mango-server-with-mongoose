@@ -3,14 +3,13 @@ import User from "../user/user.model";
 import httpStatus from "http-status-codes";
 import bcrypt from "bcryptjs";
 import config from "../../config";
-import { JwtPayload } from "jsonwebtoken";
 
 const changePasswordFromDB = async (
   oldPassword: string,
   newPassword: string,
-  decodedToken: JwtPayload
+  email: string
 ) => {
-  const isUserExist = await User.findOne(decodedToken.email);
+  const isUserExist = await User.findOne({ email });
   if (!isUserExist) {
     throw new AppError(httpStatus.NOT_FOUND, "User not found");
   }
