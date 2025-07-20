@@ -3,12 +3,18 @@ import { catchAsync } from "../../utils/catchAsync";
 import { authServices } from "./auth.service";
 import { sendResponse } from "../../utils/sendResponse";
 import httpStatus from "http-status-codes";
+import AppError from "../../error/AppError";
 
 const changePassword = catchAsync(async (req: Request, res: Response) => {
   const { oldPassword, newPassword } = req.body;
+  const decodedToken = req.user;
+  if (!decodedToken) {
+    throw new AppError(httpStatus.UNAUTHORIZED, "Invalid token");
+  }
   const userRes = await authServices.changePasswordFromDB(
     oldPassword,
-    newPassword
+    newPassword,
+    decodedToken
   );
 
   sendResponse(res, {
