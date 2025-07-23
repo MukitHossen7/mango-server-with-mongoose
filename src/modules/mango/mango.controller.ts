@@ -18,12 +18,14 @@ const createMango = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getMangos = catchAsync(async (req: Request, res: Response) => {
-  const mangos = await mangoServices.getMangosFromDB();
+  const dataQuery = res.locals.data;
+  // const mangos = await mangoServices.getMangosFromDB(dataQuery);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: "Mango Retrieved Successfully",
-    data: mangos,
+    data: dataQuery.data,
+    meta: dataQuery.meta,
   });
 });
 

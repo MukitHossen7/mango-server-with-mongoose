@@ -10,6 +10,9 @@ export const queryBuilders =
       const filter = { ...query };
       const search = query.search || "";
       const sort = query.sort || "-createdAt";
+      const page = Number(query.page) || 1;
+      const limit = Number(query.limit) || 8;
+      const skip = (page - 1) * limit;
 
       const excludeField = ["search", "sort", "fields", "page", "limit"];
       for (const field of excludeField) {
@@ -31,11 +34,27 @@ export const queryBuilders =
           [field]: { $regex: search, $options: "i" },
         })),
       };
-      const mango = await model
+
+      const data = await model
         .find(filter)
         .find(searchQuery)
-        .sort(sort as string);
-      console.log(mango);
+        .sort(sort as string)
+        .skip(skip)
+        .limit(limit);
+
+      const totalDocuments = await model.countDocuments();
+      const totalPage = Math.ceil(totalDocuments / limit);
+      const meta = {
+        page: page,
+        limit: limit,
+        totalPage: totalPage,
+        total: totalDocuments,
+      };
+
+      res.locals.data = {
+        data,
+        meta,
+      };
       next();
     } catch (error) {
       next(error);
