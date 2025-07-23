@@ -9,6 +9,7 @@ export const queryBuilders =
       // console.log(query);
       const filter = { ...query };
       const search = query.search || "";
+      const sort = query.sort || "-createdAt";
 
       const excludeField = ["search", "sort", "fields", "page", "limit"];
       for (const field of excludeField) {
@@ -30,7 +31,10 @@ export const queryBuilders =
           [field]: { $regex: search, $options: "i" },
         })),
       };
-      const mango = await model.find(filter).find(searchQuery);
+      const mango = await model
+        .find(filter)
+        .find(searchQuery)
+        .sort(sort as string);
       console.log(mango);
       next();
     } catch (error) {
