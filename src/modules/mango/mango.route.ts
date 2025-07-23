@@ -1,10 +1,12 @@
 import express from "express";
 import { mangoController } from "./mango.controller";
+import { queryBuilders } from "../../middlewares/queryBuilders";
+import Mango from "./mango.model";
 
 const mangoRoute = express.Router();
 
 mangoRoute.post("/", mangoController.createMango);
-mangoRoute.get("/", mangoController.getMangos);
+mangoRoute.get("/", queryBuilders(Mango), mangoController.getMangos);
 mangoRoute.get("/:id", mangoController.getMangoById);
 mangoRoute.patch("/:id", mangoController.updateMangoById);
 mangoRoute.delete("/:id", mangoController.deleteMangoById);
